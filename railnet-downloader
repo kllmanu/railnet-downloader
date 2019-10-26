@@ -1,1 +1,43 @@
 #!/bin/bash
+
+ssid=$(iw dev | grep ssid | awk '{print $2}')
+dest="$(xdg-user-dir DOWNLOAD &2> /dev/null || pwd)"
+
+if [[ $SSID == "OEBB" ]]; then
+	url="https://railnet.oebb.at/kiosk/"
+
+	newspaper="https://railnet.oebb.at/..."
+	magazines=""
+
+
+else
+	url="file:///$(pwd)/test/"
+
+	newspaper="$url/zeitungen/latest.json"
+	magazines=""
+fi
+
+latest=$(curl -sS $newspaper $magazines)
+issues=$(jq --arg i $1 '.issues[] | select(.publicationName|match($i;"i"))' <<< $latest)
+
+publicationName=$(jq -r '.publicationName' <<< $issues)
+publicationType=$(jq -r '.publicationType' <<< $issues)
+publicationDate=$(jq -r '.id.publicationDate' <<< $issues)
+regionToken=$(jq -r '.id.regionToken' <<< $issues)
+sourceToken=$(jq -r '.id.sourceToken' <<< $issues)
+
+if [[ $publicationType == "ZTG" ]]; then
+	publicationType="zeitungen"
+else
+	publicationType="magazine"
+fi
+
+issueConfiguration=$(curl -sS "$url/$publicationType/$sourceToken/issueConfiguration.json")
+issueVersion=$(jq -r '.issueVersion' <<< $issueConfiguration)
+baseIssueData=$(jq -r '.baseIssueData' <<< $issueConfiguration)
+
+issue=$(curl -sS "$url/$publicationType/$sourceToken/$baseIssueData")
+pages=$(jq -r '.issues[].pages[].resource' <<< $issue)
+
+# convert -compress jpeg -quality 85 ... foo.pdf
+# img2pdf ...
