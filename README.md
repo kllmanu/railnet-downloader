@@ -8,10 +8,6 @@ Download newspaper & magazines from the OeBB railnet
 2. Accept the Terms of Use in your browser before
 3. Run the script with the newspaper or magazine you're looking for
 
-```
-./railnet-downloader KEYWORD
-```
-
 The script downloads all the pages (images) of the latest issue available and creates a PDF out of them.
 
 ## Dependencies
