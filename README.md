@@ -12,5 +12,5 @@ railnet-downloader KEYWORD
 
 - [curl](https://curl.haxx.se/)
 - [jq](https://stedolan.github.io/jq/)
-- [imagemagick](https://imagemagick.org/index.php)
+- [img2pdf](https://gitlab.mister-muffin.de/josch/img2pdf)
 - [xdg-user-dirs](https://freedesktop.org/wiki/Software/xdg-user-dirs/) (optional)
