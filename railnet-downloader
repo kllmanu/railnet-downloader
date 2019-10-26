@@ -23,6 +23,11 @@ fi
 latest=$(curl -sS $newspaper $magazines)
 issues=$(jq --arg i $1 '.issues[] | select(.publicationName|match($i;"i"))' <<< $latest)
 
+if [[ -z "$issues" ]]; then
+	echo 'Newspaper or magazine not found';
+	exit 0;
+fi
+
 publicationName=$(jq -r '.publicationName' <<< $issues)
 publicationType=$(jq -r '.publicationType' <<< $issues)
 publicationDate=$(jq -r '.id.publicationDate' <<< $issues)
