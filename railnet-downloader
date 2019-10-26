@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $# -eq 0 ]]; then
+    echo 'Search term required, e.g. "FALTER" or "profil" (without the quotes)'
+    exit 0
+fi
+
 ssid=$(iw dev | grep ssid | awk '{print $2}')
 dest="$(xdg-user-dir DOWNLOAD &2> /dev/null || pwd)"
 
@@ -8,8 +13,6 @@ if [[ $SSID == "OEBB" ]]; then
 
 	newspaper="https://railnet.oebb.at/..."
 	magazines=""
-
-
 else
 	url="file:///$(pwd)/test/"
 
