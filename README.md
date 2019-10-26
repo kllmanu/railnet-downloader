@@ -7,7 +7,7 @@ Download newspaper & magazines from the OeBB railnet
 - [curl](https://github.com/curl/curl)
 - [jq](https://github.com/stedolan/jq)
 - [imagemagick](https://github.com/ImageMagick/ImageMagick)
-- [xdg-user-dirs](https://freedesktop.org/wiki/Software/xdg-user-dirs/)
+- [xdg-user-dirs](https://freedesktop.org/wiki/Software/xdg-user-dirs/) (optional)
 
 ## Trivia
 
