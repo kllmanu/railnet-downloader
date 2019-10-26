@@ -49,3 +49,14 @@ pages=$(jq -r '.issues[].pages[].resource' <<< $issue)
 
 # convert -compress jpeg -quality 85 ... foo.pdf
 # img2pdf ...
+
+mkdir -p "/tmp/$sourceToken/images"
+cd $_
+
+for image in $pages; do
+	curl -LOC - "$url/$publicationType/$sourceToken/$image"
+done
+
+
+rm -rf "/tmp/$sourceToken/images"
+cd -
