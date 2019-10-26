@@ -13,6 +13,7 @@ The script downloads all the pages (images) of the latest issue available and cr
 ## Dependencies
 
 - [curl](https://curl.haxx.se/)
+- [wget](https://www.gnu.org/software/wget/)
 - [jq](https://stedolan.github.io/jq/)
 - [img2pdf](https://gitlab.mister-muffin.de/josch/img2pdf)
 - [xdg-user-dirs](https://freedesktop.org/wiki/Software/xdg-user-dirs/) (optional)
