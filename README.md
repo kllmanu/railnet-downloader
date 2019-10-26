@@ -5,7 +5,7 @@ Download newspaper & magazines from the OeBB railnet
 ## Usage
 
 ```
-railnet-downloader [-t] KEYWORD
+railnet-downloader KEYWORD
 ```
 
 ## Dependencies
