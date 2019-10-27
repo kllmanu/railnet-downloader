@@ -21,18 +21,18 @@ else
 fi
 
 latest=$(curl -sS $newspaper $magazines)
-issues=$(jq --arg i $1 '.issues[] | select(.publicationName|match($i;"i"))' <<< $latest)
+issue=$(jq --arg i $1 '.issues[] | select(.publicationName|match($i;"i"))' <<< $latest)
 
 if [[ -z "$issue" ]]; then
 	echo 'Newspaper or magazine not found'
 	exit 0
 fi
 
-publicationName=$(jq -r '.publicationName' <<< $issues)
-publicationType=$(jq -r '.publicationType' <<< $issues)
-publicationDate=$(jq -r '.id.publicationDate' <<< $issues)
-regionToken=$(jq -r '.id.regionToken' <<< $issues)
-sourceToken=$(jq -r '.id.sourceToken' <<< $issues)
+publicationName=$(jq -r '.publicationName' <<< $issue)
+publicationType=$(jq -r '.publicationType' <<< $issue)
+publicationDate=$(jq -r '.id.publicationDate' <<< $issue)
+regionToken=$(jq -r '.id.regionToken' <<< $issue)
+sourceToken=$(jq -r '.id.sourceToken' <<< $issue)
 
 if [[ $publicationType == "ZTG" ]]; then
 	publicationType="zeitungen"
@@ -44,18 +44,17 @@ issueConfiguration=$(curl -sS "$url/$publicationType/$sourceToken/issueConfigura
 issueVersion=$(jq -r '.issueVersion' <<< $issueConfiguration)
 baseIssueData=$(jq -r '.baseIssueData' <<< $issueConfiguration)
 
-issue=$(curl -sS "$url/$publicationType/$sourceToken/$baseIssueData")
-pages=$(jq -r '.issues[].pages[].resource' <<< $issue)
-
+pages=$(curl -sS "$url/$publicationType/$sourceToken/$baseIssueData")
+images=$(jq -r '.issues[].pages[].resource' <<< $pages)
 
 mkdir -p "/tmp/$sourceToken/images"
 cd $_
 
-for image in $pages; do
+for image in $images; do
 	curl -LOC - "$url/$publicationType/$sourceToken/$image"
 done
 
-img2pdf $pages -o "$dest/${sourceToken}_${publicationDate}.pdf"
+img2pdf $images -o "$dest/${sourceToken}_${publicationDate}.pdf"
 
 rm -rf "/tmp/$sourceToken/images"
 cd -
