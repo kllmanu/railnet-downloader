@@ -8,7 +8,7 @@ fi
 ssid=$(iw dev | grep ssid | awk '{print $2}')
 dest="$(xdg-user-dir DOWNLOAD &2> /dev/null || pwd)"
 
-if [[ $SSID == "OEBB" ]]; then
+if [[ $ssid == "OEBB" ]]; then
 	url="https://railnet.oebb.at/kiosk/"
 
 	newspaper="https://railnet.oebb.at/..."
@@ -23,9 +23,9 @@ fi
 latest=$(curl -sS $newspaper $magazines)
 issues=$(jq --arg i $1 '.issues[] | select(.publicationName|match($i;"i"))' <<< $latest)
 
-if [[ -z "$issues" ]]; then
-	echo 'Newspaper or magazine not found';
-	exit 0;
+if [[ -z "$issue" ]]; then
+	echo 'Newspaper or magazine not found'
+	exit 0
 fi
 
 publicationName=$(jq -r '.publicationName' <<< $issues)
