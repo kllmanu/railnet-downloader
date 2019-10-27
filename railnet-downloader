@@ -10,17 +10,11 @@ dest="$(xdg-user-dir DOWNLOAD &2> /dev/null || pwd)"
 
 if [[ $ssid == "OEBB" ]]; then
 	url="https://railnet.oebb.at/kiosk/"
-
-	newspaper="https://railnet.oebb.at/..."
-	magazines=""
 else
 	url="file:///$(pwd)/test/"
-
-	newspaper="$url/zeitungen/latest.json"
-	magazines=""
 fi
 
-latest=$(curl -sS $newspaper $magazines)
+latest=$(curl -sS "$url/zeitungen/latest.json" "$url/magazine/latest.json")
 issue=$(jq --arg i $1 '.issues[] | select(.publicationName|match($i;"i"))' <<< $latest)
 
 if [[ -z "$issue" ]]; then
