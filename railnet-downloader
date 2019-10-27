@@ -56,5 +56,5 @@ done
 
 img2pdf $images -o "$dest/${sourceToken}_${publicationDate}.pdf"
 
-rm -rf "/tmp/$sourceToken/images"
+rm -rf "/tmp/$sourceToken"
 cd -
