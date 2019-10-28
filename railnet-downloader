@@ -7,6 +7,7 @@ fi
 
 ssid=$(iw dev | grep ssid | awk '{print $2}')
 dest="$(xdg-user-dir DOWNLOAD &2> /dev/null || pwd)"
+time=$(date +%s)
 
 if [[ $ssid == "OEBB" ]]; then
 	url="https://railnet.oebb.at/kiosk/"
@@ -14,7 +15,10 @@ else
 	url="file:///$(pwd)/test/"
 fi
 
-latest=$(curl -sS "$url/zeitungen/latest.json" "$url/magazine/latest.json")
+newspaper="$url/kiosk/zeitungen/resources/rest/issues/latest.json?t=$time"
+magazines="$url/kiosk/magazine/resources/rest/issues/latest.json?t=$time"
+
+latest=$(curl -sS $newspaper $magazines)
 issue=$(jq --arg i $1 '.issues[] | select(.publicationName|match($i;"i"))' <<< $latest)
 
 if [[ -z "$issue" ]]; then
