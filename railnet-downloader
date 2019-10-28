@@ -10,7 +10,7 @@ dest="$(xdg-user-dir DOWNLOAD &2> /dev/null || pwd)"
 time=$(date +%s)
 
 if [[ $ssid == "OEBB" ]]; then
-	url="https://railnet.oebb.at/kiosk/"
+	url="https://railnet.oebb.at/"
 else
 	url="file:///$(pwd)/test/"
 fi
@@ -32,24 +32,28 @@ publicationDate=$(jq -r '.id.publicationDate' <<< $issue)
 regionToken=$(jq -r '.id.regionToken' <<< $issue)
 sourceToken=$(jq -r '.id.sourceToken' <<< $issue)
 
+
 if [[ $publicationType == "ZTG" ]]; then
 	publicationType="zeitungen"
 else
 	publicationType="magazine"
 fi
 
-issueConfiguration=$(curl -sS "$url/$publicationType/$sourceToken/issueConfiguration.json")
+date=$(echo $publicationDate | tr -d -)
+path="kiosk/$publicationType/resources/issues/$sourceToken/$date/main"
+
+issueConfiguration=$(curl -sS "$url/$path/issueConfiguration.json")
 issueVersion=$(jq -r '.issueVersion' <<< $issueConfiguration)
 baseIssueData=$(jq -r '.baseIssueData' <<< $issueConfiguration)
 
-pages=$(curl -sS "$url/$publicationType/$sourceToken/$baseIssueData")
+pages=$(curl -sS "$url/$path/$issueVersion/$baseIssueData")
 images=$(jq -r '.issues[].pages[].resource' <<< $pages)
 
 mkdir -p "/tmp/$sourceToken/images"
 cd $_
 
 for image in $images; do
-	curl -LOC - "$url/$publicationType/$sourceToken/$image"
+	curl -LOC - "$url/$path/$issueVersion/$image"
 done
 
 img2pdf $images -o "$dest/${sourceToken}_${publicationDate}.pdf"
