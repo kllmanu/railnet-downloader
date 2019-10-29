@@ -5,9 +5,9 @@ if [[ $# -eq 0 ]]; then
     exit 0
 fi
 
+time=$(date +%s)
 ssid=$(iw dev | grep ssid | awk '{print $2}')
 dest="$(xdg-user-dir DOWNLOAD &2> /dev/null || pwd)"
-time=$(date +%s)
 
 if [[ $ssid == "OEBB" ]]; then
 	url="https://railnet.oebb.at/"
@@ -40,7 +40,7 @@ else
 fi
 
 date=$(echo $publicationDate | tr -d -)
-path="kiosk/$publicationType/resources/issues/$sourceToken/$date/main"
+path="kiosk/$publicationType/resources/issues/$sourceToken/$date/$regionToken"
 
 issueConfiguration=$(curl -sS "$url/$path/issueConfiguration.json")
 issueVersion=$(jq -r '.issueVersion' <<< $issueConfiguration)
